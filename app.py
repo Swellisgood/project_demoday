@@ -131,9 +131,6 @@ shared_selectors = dbc.Card(
                     dcc.Dropdown(
                         id="target-selector",
                         value="BTC",
-                        # options=[
-                        #     {"label": c, "value": c,} for c in crypto_list
-                        # ],
                         options=crypto_dict,
                         placeholder="Select target currency",
                         searchable=True,
@@ -347,7 +344,7 @@ ml_price_card_content = [
     className="kpi-div",
 )]
 
-# ml price forecast 
+# ml price forecast page 
 ml_page = [
     # Row for kpi & other objects above graphs
     dbc.Row(
@@ -672,7 +669,7 @@ def generate_stash_dfs(
             ]
         
         # User viewing ml page and stash is empty
-        elif pathname == "/page-2" and df_ohlc_stash is None:
+        elif pathname == "/page-2" and df_pred_stash is None:
             df_pred = pd.read_csv("data/pred/BTC_pred.csv")
             df_pred_json = df_pred.to_json(date_format="iso", orient="split")
             return [
@@ -1154,20 +1151,21 @@ def generate_prices_plot(
     ],
 )
 def generate_forecast_plot(
-    slider_range, jsonified_df, target, base,
+    slider_range, df_pred_json, target, base,
 ):
     """
     Triggers either by range selector or social. When new symbol requested,
     slider_send_update handles request then triggers this callback
     """
+    df_pred = pd.read_json(df_pred_json, orient="split")
 
     if slider_range is not None:
         smin, smax = slider_range.split("|")
         smin = int(smin)
         smax = int(smax)
-        df = df.loc[smin:smax, :]
+        df_pred = df_pred.loc[smin:smax, :]
 
-    figure_forecast = generate_ml_plot(df, base, target)
+    figure_forecast = generate_ml_plot(df_pred, base, target)
 
     return figure_forecast
 
