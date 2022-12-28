@@ -365,14 +365,11 @@ ml_page = [
                             id="trend-graph-tooltip",
                             tooltip_text=[
                                 html.A(
-                                    "MACD ",
-                                    href="https://www.investopedia.com/terms/m/macd.asp",
+                                    "Price Forecast ",
+                                    href="",
                                     target="_blank",
                                 ),
-                                """ 12-26-9 signifies market trend. When green line is above red, market is 
-                                            in uptrend and when red line is above green, market is in downtrend. 
-                                            Crossover between green-red lines signal market trend changes.
-                                            """,
+                                """ Price forecast for the crypto-asset's close price of the next day, provided by LSTM model.""",
                             ],
                         ),
                         justify="end",
@@ -1098,7 +1095,7 @@ def generate_trend_plot(
     """
 
     df = pd.read_json(jsonified_df, orient="split")
-
+    
     if slider_range is not None:
         smin, smax = slider_range.split("|")
         smin = int(smin)
